@@ -1,0 +1,266 @@
+﻿@using Prova.Models
+@model Prova.Models.Author
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+
+
+    @Html.ValidationSummary(true)
+    if (ViewBag.Message != null)
+    {
+        <div class="form-group">
+            <div class="col-md-10">@ViewBag.Message</div>
+        </div>
+    }
+ 
+    <fieldset>
+        <legend>Cadastro de pedido</legend>
+
+        <div class="editor-label">
+            Data
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.data)
+            @Html.ValidationMessageFor(model => model.data)
+        </div>
+
+        <div class="editor-label">
+            CPF
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cpf)
+            @Html.ValidationMessageFor(model => model.cpf)
+        </div>
+
+        <div class="editor-label">
+           CEP
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cep)
+            @Html.ValidationMessageFor(model => model.cep)
+        </div>
+
+        <div class="editor-label">
+           Endereço
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.endereco)
+            @Html.ValidationMessageFor(model => model.endereco)
+        </div>
+
+        <div class="editor-label">
+           Complemento
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.complemento)
+            @Html.ValidationMessageFor(model => model.complemento)
+        </div>
+
+        <div class="editor-label">
+           Bairro
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.bairro)
+            @Html.ValidationMessageFor(model => model.bairro)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.cidade)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cidade)
+            @Html.ValidationMessageFor(model => model.cidade)
+        </div>
+
+        <div class="editor-label">
+         UF
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.uf)
+            @Html.ValidationMessageFor(model => model.uf)
+        </div>
+        <div class="editor-label">
+        Selecione os produtos
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.prod.nome_produto, (List<SelectListItem>)ViewBag.ProdList, new { @class = "input-xlarge" })
+        </div>
+        <div>
+            <input id="btnAddBook" type="button"
+                   onclick="PreencheEndereco();" value="Add Book" />
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        Código do produto
+                    </td>
+                    <td>
+                        Nome produto
+                    </td>
+                    <td>
+                        Valor
+                    </td>
+                    <td>
+                        Quantidade
+                    </td>
+                    <td>
+                        Subtotal
+                    </td>
+                </tr>
+            </thead>
+            <tbody id="tbBooks"></tbody>
+        </table>
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>  
+
+<script language="javascript" type="text/javascript">
+        function removeRow(id) {
+            var controlToBeRemoved = "#trBook" + id;
+            $(controlToBeRemoved).remove();
+        }
+</script>
+
+<script language="javascript" type="text/javascript">
+    function PreencheEndereco() {
+        var exit = 0;
+        var index = $("#tbBooks").children("tr").length;
+        if (index == 0) {
+
+        }
+        else {
+            var index2 = index - 1;
+            var qtde_ant = $('#Books_' + index2 + '__Qtde').val()
+            if ((qtde_ant == 0) || (qtde_ant == '')) {
+                exit = 1;
+                alert("Por favor insira uma quantidade válidade do produto anterior");
+            }
+
+            var nome_escolhido = $('#prod_nome_produto').val()
+            for (var i = 0 ; i < index; i++) {
+                var nome = $('#Books_' + i + '__Nome').val();
+                if (nome_escolhido == nome) {
+                    alert("Produto já selecionado");
+                    exit = 1;
+                }
+            }
+        }
+        if (exit == 1) {
+
+        }
+        else {
+            $.ajax({
+                url: '/Pedido/PreencheEndereco',
+                data: { nome_produto: $('#prod_nome_produto').val() },
+                dataType: "json",
+                type: "POST",
+                success: function (data) {
+                    var result = data.Result;
+                    for (var it = 0; it < result.length; it++) {
+
+                        @{
+                Model.Books.Add(new Prova.Models.Book());
+            }
+
+                        var index = $("#tbBooks").children("tr").length;
+
+                        var id_cell = "<td><input id='Books_" + index + "__Id' name='Books[" + index + "].Id' type='text' value='' onblur='calcular();' /></td>";
+                        var nome_Cell = "<td><input id='Books_" + index + "__Nome' name='Books[" + index + "].Nome' type='text' value=''  /></td>";
+                        var valor_Cell = "<td><input id='Books_" + index + "__Valor' name='Books[" + index + "].Valor' type='text' value='' /></td>";
+                        var qtde_Cell = "<td><input id='Books_" + index + "__Qtde' name='Books[" + index + "].Qtde' type='text' value='' onblur='calcular();' /></td>";
+                        var total_Cell = "<td><input id='Books_" + index + "__Total' name='Books[" + index + "].Total' type='text' value='' /></td>";
+                        var remove_Cell = "<td><input id='btnAddBook' type='button' value='Remove' onclick='removeRow(" + index + ");' /></td>";
+
+                        var newRow = "<tr id='trBook" + index + "'>" +
+                        id_cell + nome_Cell + valor_Cell + qtde_Cell + total_Cell + remove_Cell + "</tr>";
+                        $("#tbBooks").append(newRow);
+
+
+                        $('#Books_' + index + '__Valor').val(result[it].valor);
+                        $('#Books_' + index + '__Id').val(result[it].id_produto);
+                        $('#Books_' + index + '__Nome').val(result[it].nome_produto);
+                    }
+                },
+                error: function (error) {
+                    alert("erro")
+                }
+            })
+        }
+    }
+</script>
+
+
+<script>
+    function calcular() {
+
+        var index = $("#tbBooks").children("tr").length;
+        index = index - 1;
+
+       
+        var s1 = document.getElementById('Books_'+ index + '__Qtde').value;
+        var s2 = document.getElementById('Books_' + index + '__Valor').value;
+        var s3 = s1 * s2;
+        $('#Books_' + index + '__Total').val(s3);
+
+        document.getElementById('Books_' + index + '__Qtde').disabled = !habilitar;
+
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#cpf").mask("999.999.999-99");
+        $("#data").mask("99/99/9999");
+    });</script>
+
+<script>
+    $('#cep').change(function (e) {
+        e.preventDefault();
+
+        $('#endereco').val('');
+        $('#bairro').val('');
+        $('#cidade').val('');
+        $('#uf').val('');
+
+        var cep = $('#cep').val().replace('-', "", ".");
+
+        $.getJSON("http://cep.republicavirtual.com.br/web_cep.php?cep=" + cep + "&formato=json", {}, function (data) {
+
+            if (data.resultado_txt == "sucesso - cep completo") {
+                $('#endereco').val(data.tipo_logradouro + ' ' + data.logradouro);
+                $('#bairro').val(data.bairro);
+                $('#cidade').val(data.cidade);
+                $('#uf').val(data.uf);
+            }
+            else {
+                alert("Cep não encontrado");
+                $('#endereco').val('');
+                $('#bairro').val('');
+                $('#cidade').val('');
+                $('#uf').val('');
+                $('#cep').val('');
+            }
+        });
+    })
+
+</script>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/jquery.maskedinput-1.1.4.pack.js"></script>
+}

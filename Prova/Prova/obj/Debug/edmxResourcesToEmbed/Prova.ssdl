@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProvaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ItemPedido">
+    <Key>
+      <PropertyRef Name="id_item_pedido" />
+    </Key>
+    <Property Name="id_item_pedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_pedido" Type="int" />
+    <Property Name="id_produto" Type="int" />
+    <Property Name="qtde" Type="int" />
+    <Property Name="subtotal" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Pedido">
+    <Key>
+      <PropertyRef Name="id_pedido" />
+    </Key>
+    <Property Name="id_pedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="data" Type="varchar" MaxLength="10" />
+    <Property Name="cpf" Type="varchar" MaxLength="14" Nullable="false" />
+    <Property Name="cep" Type="varchar" MaxLength="10" />
+    <Property Name="endereco" Type="varchar" MaxLength="50" />
+    <Property Name="complemento" Type="varchar" MaxLength="50" />
+    <Property Name="bairro" Type="varchar" MaxLength="50" />
+    <Property Name="cidade" Type="varchar" MaxLength="50" />
+    <Property Name="uf" Type="varchar" MaxLength="2" />
+    <Property Name="total" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Produto">
+    <Key>
+      <PropertyRef Name="id_produto" />
+    </Key>
+    <Property Name="id_produto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nome_produto" Type="varchar" MaxLength="50" />
+    <Property Name="valor" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityContainer Name="ProvaModelStoreContainer">
+    <EntitySet Name="ItemPedido" EntityType="Self.ItemPedido" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Produto" EntityType="Self.Produto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Cadastro Pedido";
+}
+
+<link href="~/Content/Site.css" rel="stylesheet" />
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Prova</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="~/Content/Site.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Anton|Open+Sans' rel='stylesheet' type='text/css'>
+    <script src="js/scripts.js"></script>
+</head>
+
+<div id="cadastro">
+    <h1>Cadastros</h1>
+</div>
+
+<section id="formulario">
+    <input id="Produto" type="submit" class="btn" value="Cadastrar produtos" onclick="window.location.href='@Url.Action("Cadastrar", "Produto")'" />
+    </span>
+    <input type="submit" class="btn2" value="Cadastrar pedidos" onclick="window.location.href='@Url.Action("Index", "Autor")'" />
+    </span>
+    </body>
+</html>
